@@ -1,0 +1,14 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/about/page": "/about",
+  "/api/contact/route": "/api/contact",
+  "/contact/page": "/contact",
+  "/courses/page": "/courses",
+  "/gallery/page": "/gallery",
+  "/icon.png/route": "/icon.png",
+  "/page": "/",
+  "/partners/page": "/partners",
+  "/students/page": "/students",
+  "/tournaments/page": "/tournaments"
+}
