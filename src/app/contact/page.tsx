@@ -132,10 +132,10 @@ export default function ContactPage() {
     </p>
   </div>
 
-  <div className="flex flex-col gap-4">
+  <div className="flex flex-col gap-6">
     {[
-      { icon: Phone, label: "Call Us", text: "+91 76208 57664", link: "tel:+917620857664", actionText: "Call Now" },
-      { icon: Mail, label: "Email Support", text: "support@gloriouschess.com", link: "https://mail.google.com/mail/?view=cm&fs=1&to=support@gloriouschess.com", actionText: "Open in Gmail" },
+      { icon: Phone, label: "Call Us", text: "+91 76208 57664", link: "tel:+917620857664" },
+      { icon: Mail, label: "Email Support", text: "support@gloriouschess.com", link: "mailto:support@gloriouschess.com" },
       {
         icon: MapPin,
         label: "Our Office",
@@ -144,7 +144,7 @@ export default function ContactPage() {
         actionText: "View on Map"
       }
     ].map((item, idx) => (
-      <div key={idx} className="flex items-start gap-8">
+      <div key={idx} className="flex items-start gap-6">
 
         {/* ICON */}
         <div className="w-16 h-16 shrink-0 rounded-2xl bg-white/5 flex items-center justify-center text-primary border border-white/10">
@@ -158,12 +158,23 @@ export default function ContactPage() {
             {item.label}
           </span>
 
-          <span className="text-lg font-bold text-gray-200 leading-snug">
-            {item.text}
-          </span>
+          {item.link ? (
+            <a 
+              href={item.link}
+              target={item.link.startsWith("http") ? "_blank" : undefined}
+              rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="text-lg font-bold text-gray-200 hover:text-primary transition-colors leading-snug break-words"
+            >
+              {item.text}
+            </a>
+          ) : (
+            <span className="text-lg font-bold text-gray-200 leading-snug">
+              {item.text}
+            </span>
+          )}
 
           {/* BUTTON RIGHT */}
-          {item.link && (
+          {item.actionText && item.link && (
             <div className="w-full flex justify-end mt-3">
               <a 
                 href={item.link}
@@ -171,7 +182,7 @@ export default function ContactPage() {
                 rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="inline-flex px-5 py-2 bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-primary/10 text-primary font-bold text-xs uppercase tracking-widest rounded-full transition-all items-center gap-2"
               >
-                <item.icon size={14} /> {item.actionText || "View on Map"}
+                <item.icon size={14} /> {item.actionText}
               </a>
             </div>
           )}
