@@ -134,13 +134,14 @@ export default function ContactPage() {
 
   <div className="flex flex-col gap-4">
     {[
-      { icon: Phone, label: "Call Us", text: "+91 76208 57664" },
-      { icon: Mail, label: "Email Support", text: "support@gloriouschess.com" },
+      { icon: Phone, label: "Call Us", text: "+91 76208 57664", link: "tel:+917620857664", actionText: "Call Now" },
+      { icon: Mail, label: "Email Support", text: "support@gloriouschess.com", link: "https://mail.google.com/mail/?view=cm&fs=1&to=support@gloriouschess.com", actionText: "Open in Gmail" },
       {
         icon: MapPin,
         label: "Our Office",
         text: "Ambad Rd, behind Sai Kirti hotel, Prayag Nagar, Kanchan Nagar, Old Jalna, Jalna, Maharashtra 431203",
-        link: "https://maps.google.com/maps?q=Ambad+Rd,+behind+Sai+Kirti+hotel,+Prayag+Nagar,+Kanchan+Nagar,+Old+Jalna,+Jalna,+Maharashtra+431203"
+        link: "https://maps.google.com/maps?q=Ambad+Rd,+behind+Sai+Kirti+hotel,+Prayag+Nagar,+Kanchan+Nagar,+Old+Jalna,+Jalna,+Maharashtra+431203",
+        actionText: "View on Map"
       }
     ].map((item, idx) => (
       <div key={idx} className="flex items-start gap-8">
@@ -166,11 +167,11 @@ export default function ContactPage() {
             <div className="w-full flex justify-end mt-3">
               <a 
                 href={item.link}
-                target="_blank"
-                rel="noreferrer"
+                target={item.link.startsWith("http") ? "_blank" : undefined}
+                rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="inline-flex px-5 py-2 bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-primary/10 text-primary font-bold text-xs uppercase tracking-widest rounded-full transition-all items-center gap-2"
               >
-                <MapPin size={14} /> View on Map
+                <item.icon size={14} /> {item.actionText || "View on Map"}
               </a>
             </div>
           )}
