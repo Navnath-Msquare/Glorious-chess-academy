@@ -2,8 +2,8 @@
 
 import { Trophy, Users, Star, Rocket, Send } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 
 // ✅ Components Imports
 import Navbar from "@/components/navbar";
@@ -11,6 +11,42 @@ import HeroSlider from "@/components/heroslider";
 import CoursesSection from "@/components/coursessection";
 import FAQSection from "@/components/faqsection";
 import Footer from "@/components/footer";
+
+function StatCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    const duration = 2000;
+    const startTime = performance.now();
+
+    const step = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // smooth cubic ease out
+      const ease = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(ease * target));
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        setCount(target);
+      }
+    };
+
+    requestAnimationFrame(step);
+  }, [isInView, target]);
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
+}
 
 export default function Home() {
   return (
@@ -24,21 +60,32 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
             {[
-              { icon: Users, stat: "1000+", label: "Students Trained" },
-              { icon: Trophy, stat: "100+", label: "Tournaments Conducted" },
-              { icon: Star, stat: "Certified", label: "FIDE-rated Coaches" },
+              { icon: Users, count: 1000, suffix: "+", label: "Students Trained" },
+              { icon: Trophy, count: 100, suffix: "+", label: "Tournaments Conducted" },
+              { icon: Star, text: "Certified", label: "FIDE-rated Coaches" },
             ].map((item, idx) => (
-              <div key={idx} className="space-y-4">
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.15 }}
+                className="space-y-4"
+              >
                 <div className="w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto border border-primary/20">
                   <item.icon size={32} />
                 </div>
                 <div className="text-5xl font-black text-white italic">
-                  {item.stat}
+                  {item.count !== undefined ? (
+                    <StatCounter target={item.count} suffix={item.suffix} />
+                  ) : (
+                    item.text
+                  )}
                 </div>
                 <p className="text-gray-500 font-bold uppercase tracking-widest text-sm">
                   {item.label}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
